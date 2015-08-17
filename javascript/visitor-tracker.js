@@ -1,9 +1,9 @@
 var maxDepth = 0;
-$( function()
+(function()
 {
     // Check the depth value every second
     window.setInterval("checkDepth()", 1000);
-});
+})();
 
 function checkDepth()
 {
