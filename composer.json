@@ -1,0 +1,21 @@
+{
+  "name": "nrsutton/visitor-tracker",
+  "description": "Track visitors' path through your site",
+  "type": "silverstripe-module",
+  "homepage": "https://github.com/nrsutton/visitor-tracker",
+  "keywords": ["track", "website-visits"],
+  "license": "MIT License",
+  "authors": [
+    {"name": "Nick Sutton","email": "nrsutton@gmail.com"}
+  ],
+  "support": {
+    "issues": "https://github.com/nrsutton/visitor-tracker/issues"
+  },
+  "require": {
+    "silverstripe/cms": "~3.1",
+    "silverstripe/framework": "~3.1"
+  },
+  "extra": {
+    "installer-name": "moduleVisitorTracker"
+  }
+}
