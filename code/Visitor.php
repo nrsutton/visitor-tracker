@@ -17,7 +17,9 @@
             if ( $lastPageViews->count() > 0 )
             {
                 $scrollDepth = 0;
+                $vidLength = 0;
                 $lastPageView = $lastPageViews->last();
+
 
                 // Calculate the time on the previous page
                     $startTime = strtotime( $lastPageView->Created );
@@ -31,8 +33,17 @@
                             $scrollDepth = (int)$_COOKIE[ "vt_sd" ];
                     }
 
+                    if ( isset( $_COOKIE['vid-start'] ) && isset( $_COOKIE['vid-end'] ) )
+                    {
+                        $vidLength = (int)$_COOKIE['vid-end'] - (int)$_COOKIE['vid-start'];
+                        setcookie("vid-start", "", time()-3600);
+                        setcookie("vid-end", "", time()-3600);
+                    }
+
                 $lastPageView->ScrollDepth = $scrollDepth;
                 $lastPageView->TimeOnPage = $timeOnPage;
+                if ( $vidLength > 0 ) $lastPageView->Notes = "The video on this page was viewed for " . $vidLength . " seconds";
+
                 $lastPageView->write();
             }
 
