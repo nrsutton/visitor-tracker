@@ -13,13 +13,15 @@
 
         public function logPageArrival()
         {
+            $exceptions = array( '95.154.224.214' );
+            if ( in_array( $_SERVER[ 'REMOTE_ADDR' ], $exceptions ) )
+                return;
             $lastPageViews = PageView::get( "PageView", "VisitorID = {$this->ID}" );
             if ( $lastPageViews->count() > 0 )
             {
                 $scrollDepth = 0;
                 $vidLength = 0;
                 $lastPageView = $lastPageViews->last();
-
 
                 // Calculate the time on the previous page
                     $startTime = strtotime( $lastPageView->Created );
