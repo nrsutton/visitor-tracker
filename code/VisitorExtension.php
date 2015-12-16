@@ -15,7 +15,8 @@
 
         public function postRequest( SS_HTTPRequest $request, SS_HTTPResponse $response, DataModel $model )
         {
-            if  ( ! $response->isError() && ! Director::is_ajax() )
+            $exceptions = array( '95.154.224.214' );
+            if  ( ! $response->isError() && ! Director::is_ajax() && ! in_array( $_SERVER[ 'REMOTE_ADDR' ], $exceptions ) )
             {
                 // Find or create the visitor record
                     $visitor = Visitor::initVisitor();
