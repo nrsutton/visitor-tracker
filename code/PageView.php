@@ -1,7 +1,7 @@
 <?php
     class PageView extends DataObject
     {
-        private static $db = array (
+        private static $db = array(
             'URL' => 'varchar(255)',
             'Referrer' => 'varchar(255)',
             'UserAgent' => 'text',
@@ -11,7 +11,7 @@
             'TimeOnPage' => 'int'
         );
 
-        private static $has_one = array (
+        private static $has_one = array(
             'Visitor' => 'Visitor'
         );
     }
