@@ -1,2 +1,2 @@
 <?php
-    Object::add_extension('Page', 'VisitorExtension');
+    Object::add_extension('Page_Controller', 'VisitorExtension');

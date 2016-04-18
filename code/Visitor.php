@@ -4,7 +4,9 @@
             'IPAddress' => 'varchar',
             'referer' => 'text',
             'searchTerm' => 'varchar',
-            'securityID' => 'varchar'
+            'securityID' => 'varchar',
+            'resolution' => 'varchar',
+            'platform' => 'varchar'
         );
 
         private static $has_many = array (
@@ -13,9 +15,9 @@
 
         public function logPageArrival()
         {
-            $exceptions = array( '95.154.224.214' );
-            if ( in_array( $_SERVER[ 'REMOTE_ADDR' ], $exceptions ) )
-                return;
+            $referer = isset( $_POST[ 'ref' ] ) ? self::getDomain( $_POST[ 'ref' ] ) : "";
+            $resolution = isset( $_POST[ 'res' ] ) ? self::getDomain( $_POST[ 'res' ] ) : "";
+
             $lastPageViews = PageView::get( "PageView", "VisitorID = {$this->ID}" );
             if ( $lastPageViews->count() > 0 )
             {
@@ -53,12 +55,13 @@
                 $PageView = PageView::create( array (
                     'VisitorID'   => $this->ID,
                     'URL'         => isset( $_SERVER[ 'REQUEST_URI' ] ) ? $_SERVER[ 'REQUEST_URI' ] : "",
-                    'Referrer'    => isset( $_SERVER[ 'HTTP_REFERER' ] ) ? $_SERVER[ 'HTTP_REFERER' ] : "",
+                    'Referrer'     => $referer,
                     'UserAgent'   => isset( $_SERVER[ 'HTTP_USER_AGENT' ] ) ? $_SERVER[ 'HTTP_USER_AGENT' ] : "",
                     'Cookie'      => isset( $_SERVER[ 'HTTP_COOKIE' ] ) ? $_SERVER[ 'HTTP_COOKIE' ] : "",
                     'ScrollDepth' => 0,
                     'Notes'       => ''
                 ) );
+                print_r( $PageView );
                 $PageView->write();
         }
 
@@ -67,11 +70,13 @@
             $secID =  SecurityToken::inst()->getSecurityID();
             if ( ! $visitor = self::get()->find( 'securityID', $secID ) )
             {
-                $referer = isset( $_SERVER[ 'HTTP_REFERER' ] ) ? self::getDomain( $_SERVER[ 'HTTP_REFERER' ] ) : "";
+                $referer = isset( $_POST[ 'ref' ] ) ? $_POST[ 'ref' ] : "";
+                $resolution = isset( $_POST[ 'res' ] ) ? $_POST[ 'res' ] : "";
+                $platform = isset( $_POST[ 'plat' ] ) ? $_POST[ 'plat' ] : "";
                 $searchTerm = "";
 
                 // This is a new visitor so lets see if we can find out where they came from
-                $visitor = self::saveVisitor( $secID, $_SERVER[ 'REMOTE_ADDR' ], $referer, $searchTerm );
+                $visitor = self::saveVisitor( $secID, $_SERVER[ 'REMOTE_ADDR' ], $referer, $searchTerm, $resolution, $platform );
 
 
             }
@@ -84,13 +89,15 @@
             return parse_url( $url, PHP_URL_HOST );
         }
 
-        private static function saveVisitor( $secID, $ipAddress, $referer = "", $searchTerm = "" )
+        private static function saveVisitor( $secID, $ipAddress, $referer = "", $searchTerm = "", $resolution = "", $platform = "")
         {
             $visitor = self::create( array (
                 "IPAddress" => $ipAddress,
                 "securityID" => $secID,
                 "referer" => $referer,
-                "searchTerm" => $searchTerm
+                "searchTerm" => $searchTerm,
+                "resolution" => $resolution,
+                "platform" => $platform
             ));
             $visitor->write();
             return $visitor;
