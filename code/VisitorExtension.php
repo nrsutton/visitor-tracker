@@ -23,7 +23,7 @@
 
         public function handleVisitor()
         {
-            $exceptions = array( '95.154.224.214' );
+            $exceptions = array( '95.154.224.214', '10.0.0.163', '217.205.168.248' );
             if  ( ! in_array( $_SERVER[ 'REMOTE_ADDR' ], $exceptions ) )
             {
                 // Find or create the visitor record

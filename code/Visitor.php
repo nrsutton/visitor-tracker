@@ -39,6 +39,7 @@
                             setcookie("vt_sd", 0, time() - 3600);
                     }
 
+                // Check if video details were sent through
                     if ( isset( $_COOKIE['vid-start'] ) && isset( $_COOKIE['vid-end'] ) )
                     {
                         $vidLength = (int)$_COOKIE['vid-end'] - (int)$_COOKIE['vid-start'];
