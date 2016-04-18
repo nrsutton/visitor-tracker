@@ -15,8 +15,8 @@
 
         public function logPageArrival()
         {
-            $referer = isset( $_POST[ 'ref' ] ) ? self::getDomain( $_POST[ 'ref' ] ) : "";
-            $resolution = isset( $_POST[ 'res' ] ) ? self::getDomain( $_POST[ 'res' ] ) : "";
+            $referer = isset( $_POST[ 'ref' ] ) ? $_POST[ 'ref' ] : "";
+            $resolution = isset( $_POST[ 'res' ] ) ? $_POST[ 'res' ] : "";
 
             $lastPageViews = PageView::get( "PageView", "VisitorID = {$this->ID}" );
             if ( $lastPageViews->count() > 0 )
@@ -35,6 +35,8 @@
                     {
                         // Get the scroll depth
                             $scrollDepth = (int)$_COOKIE[ "vt_sd" ];
+                        // Reset the depth
+                            setcookie("vt_sd", 0, time() - 3600);
                     }
 
                     if ( isset( $_COOKIE['vid-start'] ) && isset( $_COOKIE['vid-end'] ) )
@@ -54,7 +56,7 @@
             // Save this page view (Scroll depth will be updated on the next page's view)
                 $PageView = PageView::create( array (
                     'VisitorID'   => $this->ID,
-                    'URL'         => isset( $_SERVER[ 'REQUEST_URI' ] ) ? $_SERVER[ 'REQUEST_URI' ] : "",
+                    'URL'         => isset( $_SERVER[ 'REQUEST_URI' ] ) ? str_replace( "/handleVisitor", "", $_SERVER[ 'REQUEST_URI' ] ) : "",
                     'Referrer'     => $referer,
                     'UserAgent'   => isset( $_SERVER[ 'HTTP_USER_AGENT' ] ) ? $_SERVER[ 'HTTP_USER_AGENT' ] : "",
                     'Cookie'      => isset( $_SERVER[ 'HTTP_COOKIE' ] ) ? $_SERVER[ 'HTTP_COOKIE' ] : "",

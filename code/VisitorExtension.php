@@ -39,9 +39,8 @@
             Requirements::customScript( "
                 if (document.visibilityState !== 'prerender')
                 {
-                    console.log(navigator);
                     var xmlhttp;
-                    var referer = document.referer;
+                    var referer = document.referrer;
                     var resolution = window.screen.width + '%20x%20' + window.screen.height;
                     var platform = navigator.platform;
 
@@ -54,9 +53,9 @@
                     }
 
                     var l = window.location.pathname;
-                    if( l == '/' ) l = '/home';
+                    if( l == '/' ) l = '/home/';
 
-                    xmlhttp.open('POST', l + '/handleVisitor/', true);
+                    xmlhttp.open('POST', l + 'handleVisitor/', true);
                     xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                     xmlhttp.send('ref=' + referer + '&res=' + resolution + '&plat=' + platform);
                 }
